@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oxygen&family=Raleway:wght@300&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cabin&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Raleway', sans-serif;
+                font-size: 20px;
+                background: linear-gradient(to bottom right, black, #333333); /* Added this line */
+                color: #e0e0e0; /* To make text more readable against the gradient */
+            }
+
+            h1, h2, h3, p {
+                font-family: 'Cabin', sans-serif;
+                font-size: 18px;
+            }
+
+            hr {
+                border-top: 1px solid #666;
+            }
+            table {
+                background-color: #1a1a1a;  /* slightly lighter than black */
+                border-collapse: collapse;  /* for clean borders */
+                border: none;
+                backdrop-filter:blur(20px) brightness(200%);
+            }
+            table th, table td {
+                padding: 10px;
+                border: none;
+            }
+
+            thead th {
+                background-color: #333333;  /* darker background for headers */
+                color: #e0e0e0;  /* light text for headers */
+            }
+
+            .container {
+                padding-top: 2rem;
+            }
+        </style>
+        <title>Charleston Computer Parts</title>
+    </head>
+    <body>
+    <div class="container">
+        <h1>Charelston Computer Parts LLC</h1>
+        <hr>
+        <a href="/about" class="btn btn-secondary">About Us</a>
+
+        <h2 class="mt-4">Parts</h2>
+        <form th:action="@{/mainscreen}" class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">Filter</span>
+                <input type="text" name="partkeyword" id="partkeyword" class="form-control" placeholder="Search parts" th:value="${partkeyword}" required>
+                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-outline-secondary" type="button" id="btnClearPart" onclick="clearSearch()">Clear</button>
+            </div>
+        </form>
+        <a th:href="@{/showFormAddInPart}" class="btn btn-outline-light btn-sm mb-3">Add Inhouse Part</a>
+        <a th:href="@{/showFormAddOutPart}" class="btn btn-outline-light btn-sm mb-3">Add Outsourced Part</a>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th class="text-white">Name</th>
+            <th class="text-white">Price</th>
+            <th class="text-white">Inventory</th>
+            <th class="text-white">Minimum</th>
+            <th class="text-white">Maximum</th>
+            <th class="text-white">Action</th>
+        </tr>
+        </thead>
+        <tbody class="text-white">
+        <tr th:each="tempPart : ${parts}">
+            <td class="text-white" th:text ="${tempPart.name}">1</td>
+            <td class="text-white" th:text="${tempPart.price}">1</td>
+            <td class="text-white" th:text="${tempPart.inv}">1</td>
+            <td class="text-white" th:text="${tempPart.minimum}"> 1 </td>
+            <td class="text-white" th:text="${tempPart.maximum}"> 1 </td>
+            <td>
+                <a th:href="@{/showPartFormForUpdate(partID=${tempPart.id})}" class="btn btn-outline-light btn-sm mb-3">Update</a>
+                <a th:href="@{/deletepart(partID=${tempPart.id})}" class="btn btn-outline-light btn-sm mb-3"
+                   onclick="if(!(confirm('Are you sure you want to delete this part?')))return false">Delete</a>
+
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Products</h2>
+    <form th:action="@{/mainscreen}">
+        Filter: <label for="productkeyword"></label><input type="text" name="productkeyword" id="productkeyword" size="50" th:value="${productkeyword}" required />
+        &nbsp;
+        <input type="submit" value="Search" />
+        &nbsp;
+        <input type="button" value="Clear" id="btnClearProduct" onclick="clearSearch()" />
+    </form>
+    <script type="text/javascript">
+        function clearSearch() {
+            window.location = "[[@{/}]]";
+        }
+    </script>
+    <br><br>
+    <a th:href="@{/showFormAddProduct}" class="btn btn-outline-light btn-sm mb-3">Add Product</a>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th class="text-white">Name</th>
+            <th class="text-white">Price</th>
+            <th class="text-white">Inventory</th>
+            <th class="text-white"> Action</th>
+        </tr>
+        </thead>
+        <tbody class="text-white">
+        <tr th:each="tempProduct : ${products}">
+            <td class="text-white" th:text="${tempProduct.name}">1</td>
+            <td class="text-white" th:text="${tempProduct.price}">1</td>
+            <td class="text-white" th:text="${tempProduct.inv}">1</td>
+            <td><a th:href="@{/showProductFormForUpdate(productID=${tempProduct.id})}" class="btn btn-outline-light btn-sm mb-3">Update</a>
+                <a th:href="@{/deleteproduct(productID=${tempProduct.id})}" class="btn btn-outline-light btn-sm mb-3"
+                   onclick="if(!(confirm('Are you sure you want to delete this product?')))return false">Delete</a>
+                <a class="class= btn btn-success btn-sm mb-3"
+                   th:attr="data-product-id=${tempProduct.id}"
+                   onclick="if(confirmPurchase()) buyProduct(this);"> Buy Now </a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function clearSearch() {
+        window.location = "[[@{/}]]";
+    }
+    function confirmPurchase() {
+        return confirm('Are you sure you want to purchase this product?');
+    }
+
+    function buyProduct(buttonElement) {
+        let productId = buttonElement.getAttribute("data-product-id");
+        window.location.href = '/buyproduct?productID=' + productId;
+    }
+
+</script>
+</body>
+</html>
